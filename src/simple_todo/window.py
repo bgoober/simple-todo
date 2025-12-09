@@ -95,16 +95,18 @@ class ListRow(Gtk.Box):
         right_box.set_valign(Gtk.Align.CENTER)
         right_box.set_halign(Gtk.Align.END)
         
-        # Task count badge
-        pending = len(todo_list.get_pending_tasks())
-        if pending > 0:
-            self.count_label = Gtk.Label(label=str(pending))
+        # Task count badge (completed/total format)
+        completed = len(todo_list.get_completed_tasks())
+        total = len(todo_list.tasks)
+        if total > 0:
+            self.count_label = Gtk.Label(label=f"{completed}/{total}")
             self.count_label.add_css_class("badge")
             right_box.append(self.count_label)
         
         # Edit button (hidden by default, shown when selected)
         self.edit_btn = Gtk.Button(icon_name="document-edit-symbolic")
         self.edit_btn.add_css_class("flat")
+        self.edit_btn.add_css_class("compact-button")
         self.edit_btn.set_tooltip_text("Edit list")
         self.edit_btn.set_visible(False)
         self.edit_btn.connect("clicked", self._on_edit_clicked)
@@ -161,6 +163,12 @@ class MainWindow(Adw.ApplicationWindow):
             }
             .sidebar-container {
                 border-right: 1px solid @borders;
+            }
+            .compact-button {
+                min-height: 0;
+                min-width: 0;
+                padding: 2px;
+                margin: 0;
             }
         """)
         Gtk.StyleContext.add_provider_for_display(
@@ -260,6 +268,14 @@ class MainWindow(Adw.ApplicationWindow):
         
         content_box.append(input_box)
         
+        # Active list name header (centered, below input)
+        self.active_list_label = Gtk.Label(label="")
+        self.active_list_label.set_halign(Gtk.Align.CENTER)
+        self.active_list_label.add_css_class("title-4")
+        self.active_list_label.set_margin_top(4)
+        self.active_list_label.set_margin_bottom(8)
+        content_box.append(self.active_list_label)
+        
         # Scrollable task list
         scroll_tasks = Gtk.ScrolledWindow()
         scroll_tasks.set_vexpand(True)
@@ -300,6 +316,14 @@ class MainWindow(Adw.ApplicationWindow):
         """Show placeholder or content based on selection."""
         has_list = self.current_list is not None
         self.task_entry.set_sensitive(has_list)
+        
+        # Update active list name header
+        if has_list:
+            self.active_list_label.set_label(self.current_list.name)
+            self.active_list_label.set_visible(True)
+        else:
+            self.active_list_label.set_label("")
+            self.active_list_label.set_visible(False)
     
     def _load_lists(self):
         """Load all lists into the sidebar."""
@@ -496,6 +520,7 @@ class MainWindow(Adw.ApplicationWindow):
                     if success:
                         if self.current_list and self.current_list.id == todo_list.id:
                             self.current_list = self.storage.get_list(todo_list.id)
+                            self._update_content_visibility()  # Update header label
                         self._load_lists()
                     else:
                         # Show error - name is likely a duplicate
