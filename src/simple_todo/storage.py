@@ -66,7 +66,7 @@ class Storage:
     
     def _ensure_data_dir(self) -> None:
         """Create data directory if it doesn't exist."""
-        self.data_dir.mkdir(parents=True, exist_ok=True)
+        self.data_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
     
     def _load(self) -> None:
         """Load data from JSON file."""
@@ -93,6 +93,8 @@ class Storage:
         self._ensure_data_dir()
         fd, temp_path = tempfile.mkstemp(dir=self.data_dir, suffix=".tmp")
         try:
+            # Set restrictive permissions (owner read/write only)
+            os.fchmod(fd, 0o600)
             with os.fdopen(fd, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2, ensure_ascii=False)
             os.replace(temp_path, self.data_file)
