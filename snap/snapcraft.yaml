@@ -11,6 +11,7 @@ description: |
   - Tasks are organized by completion status
   - All data stored locally and securely
 
+icon: snap/gui/simple-todo.svg
 grade: stable
 confinement: strict
 base: core22

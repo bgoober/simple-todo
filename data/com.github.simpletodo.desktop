@@ -2,7 +2,7 @@
 Name=Simple Todo
 Comment=A minimal to-do list application
 Exec=simple-todo
-Icon=view-list-symbolic
+Icon=${SNAP}/meta/gui/icon.svg
 Terminal=false
 Type=Application
 Categories=Utility;GTK;
