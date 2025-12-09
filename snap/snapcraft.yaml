@@ -1,0 +1,65 @@
+name: simple-todo
+version: '1.0.0'
+summary: A minimal to-do list application
+description: |
+  Simple Todo is a clean, lightweight to-do list application for managing
+  your tasks. Features include:
+  
+  - Create multiple to-do lists
+  - Add, edit, and delete tasks
+  - Mark tasks as complete/incomplete
+  - Tasks are organized by completion status
+  - All data stored locally and securely
+
+grade: stable
+confinement: strict
+base: core22
+
+# Security: Strict confinement with minimal permissions
+# Only home access is needed for storing user data
+
+apps:
+  simple-todo:
+    command: usr/bin/simple-todo
+    extensions: [gnome]
+    desktop: usr/share/applications/com.github.simpletodo.desktop
+    plugs:
+      - home      # For storing todo data in ~/.local/share/
+
+parts:
+  simple-todo:
+    plugin: python
+    source: .
+    python-packages:
+      - PyGObject
+    stage-packages:
+      - python3-gi
+      - python3-gi-cairo
+      - gir1.2-gtk-4.0
+      - gir1.2-adw-1
+      - libadwaita-1-0
+    organize:
+      bin/simple-todo: usr/bin/simple-todo
+    override-build: |
+      craftctl default
+      # Create the entry point script
+      mkdir -p $CRAFT_PART_INSTALL/bin
+      cat > $CRAFT_PART_INSTALL/bin/simple-todo << 'EOF'
+      #!/usr/bin/env python3
+      import sys
+      sys.path.insert(0, '/snap/simple-todo/current/lib/python3/dist-packages')
+      from simple_todo.main import main
+      sys.exit(main())
+      EOF
+      chmod +x $CRAFT_PART_INSTALL/bin/simple-todo
+      
+      # Install the application module
+      mkdir -p $CRAFT_PART_INSTALL/lib/python3/dist-packages
+      cp -r src/simple_todo $CRAFT_PART_INSTALL/lib/python3/dist-packages/
+
+  desktop-file:
+    plugin: dump
+    source: data/
+    organize:
+      com.github.simpletodo.desktop: usr/share/applications/com.github.simpletodo.desktop
+

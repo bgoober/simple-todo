@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Simple Todo
+Comment=A minimal to-do list application
+Exec=simple-todo
+Icon=view-list-symbolic
+Terminal=false
+Type=Application
+Categories=Utility;GTK;
+Keywords=todo;task;list;productivity;
+StartupNotify=true
+
