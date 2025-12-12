@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Simple Todo List
-Comment=A clean, lightweight to-do list application for managing tasks
-Exec=simple-todo
+Comment=A simple, minimal, lightweight to-do list application for managing tasks
+Exec=minimal-todo-list
 Icon=${SNAP}/meta/gui/icon.svg
 Terminal=false
 Type=Application

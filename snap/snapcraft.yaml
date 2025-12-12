@@ -1,8 +1,8 @@
-name: simple-todo
+name: minimal-todo-list
 version: '1.0.0'
-summary: A clean, lightweight to-do list application
+summary: A simple, minimal, lightweight to-do list application
 description: |
-  Simple Todo List is a clean, lightweight to-do list application for managing
+  Simple Todo List is a clean, minimal, lightweight to-do list application for managing
   your tasks. Features include:
   
   - Create multiple to-do lists
@@ -11,7 +11,7 @@ description: |
   - Tasks are organized by completion status
   - All data stored locally and securely
 
-icon: snap/gui/simple-todo.svg
+icon: snap/gui/minimal-todo-list.svg
 grade: stable
 confinement: strict
 base: core22
@@ -20,15 +20,15 @@ base: core22
 # Only home access is needed for storing user data
 
 apps:
-  simple-todo:
-    command: usr/bin/simple-todo
+  minimal-todo-list:
+    command: usr/bin/minimal-todo-list
     extensions: [gnome]
     desktop: usr/share/applications/com.github.simpletodo.desktop
     plugs:
       - home      # For storing todo data in ~/.local/share/
 
 parts:
-  simple-todo:
+  minimal-todo-list:
     plugin: python
     source: .
     python-packages:
@@ -40,19 +40,19 @@ parts:
       - gir1.2-adw-1
       - libadwaita-1-0
     organize:
-      bin/simple-todo: usr/bin/simple-todo
+      bin/minimal-todo-list: usr/bin/minimal-todo-list
     override-build: |
       craftctl default
       # Create the entry point script
       mkdir -p $CRAFT_PART_INSTALL/bin
-      cat > $CRAFT_PART_INSTALL/bin/simple-todo << 'EOF'
+      cat > $CRAFT_PART_INSTALL/bin/minimal-todo-list << 'EOF'
       #!/usr/bin/env python3
       import sys
-      sys.path.insert(0, '/snap/simple-todo/current/lib/python3/dist-packages')
+      sys.path.insert(0, '/snap/minimal-todo-list/current/lib/python3/dist-packages')
       from simple_todo.main import main
       sys.exit(main())
       EOF
-      chmod +x $CRAFT_PART_INSTALL/bin/simple-todo
+      chmod +x $CRAFT_PART_INSTALL/bin/minimal-todo-list
       
       # Install the application module
       mkdir -p $CRAFT_PART_INSTALL/lib/python3/dist-packages

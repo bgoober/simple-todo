@@ -135,6 +135,6 @@ sudo snap install simple-todo_1.0.0_amd64.snap --dangerous
 
 1. Create an account at https://snapcraft.io/
 2. Run `snapcraft login`
-3. Run `snapcraft register simple-todo`
-4. Run `snapcraft upload simple-todo_1.0.0_amd64.snap`
+3. Run `snapcraft register minimal-todo-list`
+4. Run `snapcraft upload minimal-todo-list_1.0.0_amd64.snap`
 

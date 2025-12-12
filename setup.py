@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(
     name="simple-todo",
     version="1.0.0",
-    description="A clean, lightweight to-do list application",
+    description="A simple, minimal, lightweight to-do list application",
     author="bgoober",
     license="MIT",
     packages=find_packages(where="src"),
