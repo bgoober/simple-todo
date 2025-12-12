@@ -31,6 +31,12 @@ parts:
   minimal-todo-list:
     plugin: python
     source: .
+    build-packages:
+      - libgtk-4-dev
+      - libadwaita-1-dev
+      - libgirepository1.0-dev
+      - gobject-introspection
+      - pkg-config
     python-packages:
       - PyGObject
     stage-packages:
